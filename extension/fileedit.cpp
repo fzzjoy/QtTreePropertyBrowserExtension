@@ -51,7 +51,21 @@ FileEdit::FileEdit(QWidget *parent)
 
 void FileEdit::buttonClicked()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Choose a file"), theLineEdit->text(), theFilter);
+    QString filePath;
+    switch (fileMode())
+    {
+    case FileMode::FileMode_getOpenFileName:
+        filePath = QFileDialog::getOpenFileName(this, tr("选取文件"), theLineEdit->text(), theFilter);
+        break;
+    case FileMode::FileMode_getSaveFileName:
+        filePath = QFileDialog::getSaveFileName(this, tr("保存文件"), theLineEdit->text(), theFilter);
+        break;
+    case FileMode::FileMode_getExistingDirectory:
+    default:
+        filePath = QFileDialog::getExistingDirectory(this, tr("选取路径"), theLineEdit->text());
+        break;
+    }
+
     if (filePath.isNull())
         return;
     theLineEdit->setText(filePath);

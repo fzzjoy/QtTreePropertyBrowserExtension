@@ -45,6 +45,7 @@ protected:
 private slots:
     void slotPropertyChanged(QtProperty *property, const QString &value);
     void slotFilterChanged(QtProperty *property, const QString &filter);
+    void slotFileModeChanged(QtProperty *property, const int fileMode);
     void slotSetValue(const QString &value);
     void slotEditorDestroyed(QObject *object);
 private:

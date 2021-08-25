@@ -38,6 +38,8 @@ void FileEditFactory::connectPropertyManager(FilePathManager *manager)
                 this, SLOT(slotPropertyChanged(QtProperty *, const QString &)));
     connect(manager, SIGNAL(filterChanged(QtProperty *, const QString &)),
                 this, SLOT(slotFilterChanged(QtProperty *, const QString &)));
+    connect(manager, SIGNAL(fileModeChanged(QtProperty *, const int)),
+                this, SLOT(slotFileModeChanged(QtProperty *, const int)));
 }
 
 QWidget *FileEditFactory::createEditor(FilePathManager *manager,
@@ -46,6 +48,7 @@ QWidget *FileEditFactory::createEditor(FilePathManager *manager,
     FileEdit *editor = new FileEdit(parent);
     editor->setFilePath(manager->value(property));
     editor->setFilter(manager->filter(property));
+    editor->setFileMode(manager->fileMode(property));
     theCreatedEditors[property].append(editor);
     theEditorToProperty[editor] = property;
 
@@ -62,6 +65,8 @@ void FileEditFactory::disconnectPropertyManager(FilePathManager *manager)
                 this, SLOT(slotPropertyChanged(QtProperty *, const QString &)));
     disconnect(manager, SIGNAL(filterChanged(QtProperty *, const QString &)),
                 this, SLOT(slotFilterChanged(QtProperty *, const QString &)));
+    disconnect(manager, SIGNAL(fileModeChanged(QtProperty *, const int)),
+                this, SLOT(slotFileModeChanged(QtProperty *, const int)));
 }
 
 void FileEditFactory::slotPropertyChanged(QtProperty *property,
@@ -86,6 +91,17 @@ void FileEditFactory::slotFilterChanged(QtProperty *property,
     QListIterator<FileEdit *> itEditor(editors);
     while (itEditor.hasNext())
         itEditor.next()->setFilter(filter);
+}
+
+void FileEditFactory::slotFileModeChanged(QtProperty *property, const int fileMode)
+{
+    if (!theCreatedEditors.contains(property))
+        return;
+
+    QList<FileEdit *> editors = theCreatedEditors[property];
+    QListIterator<FileEdit *> itEditor(editors);
+    while (itEditor.hasNext())
+        itEditor.next()->setFileMode(fileMode);
 }
 
 void FileEditFactory::slotSetValue(const QString &value)

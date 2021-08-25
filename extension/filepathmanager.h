@@ -37,13 +37,16 @@ public:
 
     QString value(const QtProperty *property) const;
     QString filter(const QtProperty *property) const;
+    int     fileMode(const QtProperty *property) const;
 
 public slots:
     void setValue(QtProperty *property, const QString &val);
     void setFilter(QtProperty *property, const QString &fil);
+    void setFileMode(QtProperty *property, const int fileMode);
 signals:
     void valueChanged(QtProperty *property, const QString &val);
     void filterChanged(QtProperty *property, const QString &fil);
+    void fileModeChanged(QtProperty *property, const int fileMode);
 protected:
     virtual QString valueText(const QtProperty *property) const { return value(property); }
     virtual void initializeProperty(QtProperty *property) { theValues[property] = Data(); }
@@ -54,6 +57,7 @@ private:
     {
         QString value;
         QString filter;
+        int     fileMode;
     };
 
     QMap<const QtProperty *, Data> theValues;

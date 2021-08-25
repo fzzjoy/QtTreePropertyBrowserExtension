@@ -25,6 +25,7 @@
 #include "qtpropertymanager.h"
 #include "qteditorfactory.h"
 #include "filepathmanager.h"
+#include "fileedit.h"
 #include "fileeditfactory.h"
 #include "qttreepropertybrowser.h"
 
@@ -63,13 +64,25 @@ int main(int argc, char **argv)
     browser->show();
 
     FilePathManager *filePathManager = new FilePathManager();
-    QtProperty *example = filePathManager->addProperty("Example");
-    filePathManager->setValue(example, "main.cpp");
-    filePathManager->setFilter(example, "Source files (*.cpp *.c)");
+    QtProperty *open_file = filePathManager->addProperty("打开文件");
+    filePathManager->setValue(open_file, "open_file.cpp");
+    filePathManager->setFilter(open_file, "Source files (*.cpp *.c)");
+    filePathManager->setFileMode(open_file, FileEdit::FileMode::FileMode_getOpenFileName);
+
+    QtProperty *save_file = filePathManager->addProperty("保存文件");
+    filePathManager->setValue(save_file, "save_file.cpp");
+    filePathManager->setFilter(save_file, "Source files (*.cpp *.c)");
+    filePathManager->setFileMode(save_file, FileEdit::FileMode::FileMode_getSaveFileName);
+
+    QtProperty *open_dir = filePathManager->addProperty("选取路径");
+    filePathManager->setValue(open_dir, "open_dir");
+    filePathManager->setFileMode(open_dir, FileEdit::FileMode::FileMode_getExistingDirectory);
 
     FileEditFactory *fileEditFactory = new FileEditFactory();
     browser->setFactoryForManager(filePathManager, fileEditFactory);
-    task1->addSubProperty(example);
+    task1->addSubProperty(open_file);
+    task1->addSubProperty(save_file);
+    task1->addSubProperty(open_dir);
 
     return app.exec();
 }

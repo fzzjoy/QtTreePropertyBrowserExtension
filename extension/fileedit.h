@@ -30,11 +30,31 @@ class FileEdit : public QWidget
 {
     Q_OBJECT
 public:
+    enum FileMode
+    {
+        FileMode_getExistingDirectory = 0,  // 选取路径
+        FileMode_getOpenFileName,           // 打开文件
+        FileMode_getSaveFileName            // 保存文件
+    };
+
     FileEdit(QWidget *parent = 0);
     void setFilePath(const QString &filePath) { if (theLineEdit->text() != filePath) theLineEdit->setText(filePath); }
     QString filePath() const { return theLineEdit->text(); }
     void setFilter(const QString &filter) { theFilter = filter; }
     QString filter() const { return theFilter; }
+    void setFileMode(const int mode)
+    {
+        if(mode >= FileMode_getExistingDirectory && mode <= FileMode_getSaveFileName)
+        {
+            theFileMode = static_cast<FileMode>(mode);
+        }
+        else
+        {
+            theFileMode = FileMode_getExistingDirectory;
+        }
+    }
+    int fileMode() const {return theFileMode;}
+
 signals:
     void filePathChanged(const QString &filePath);
 protected:
@@ -45,6 +65,7 @@ protected:
 private slots:
     void buttonClicked();
 private:
+    FileMode theFileMode = FileMode_getExistingDirectory;
     QLineEdit *theLineEdit;
     QString theFilter;
 };

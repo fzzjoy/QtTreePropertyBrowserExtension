@@ -37,6 +37,13 @@ QString FilePathManager::filter(const QtProperty *property) const
     return theValues[property].filter;
 }
 
+int FilePathManager::fileMode(const QtProperty *property) const
+{
+    if (!theValues.contains(property))
+        return -1;
+    return theValues[property].fileMode;
+}
+
 void FilePathManager::setValue(QtProperty *property, const QString &val)
 {
     if (!theValues.contains(property))
@@ -70,5 +77,22 @@ void FilePathManager::setFilter(QtProperty *property, const QString &fil)
     theValues[property] = data;
 
     emit filterChanged(property, data.filter);
+}
+
+void FilePathManager::setFileMode(QtProperty *property, const int fileMode)
+{
+    if (!theValues.contains(property))
+        return;
+
+    Data data = theValues[property];
+
+    if (data.fileMode == fileMode)
+        return;
+
+    data.fileMode = fileMode;
+
+    theValues[property] = data;
+
+    emit fileModeChanged(property, data.fileMode);
 }
 
