@@ -7,6 +7,6 @@ TARGET +=
 DEPENDPATH += . src
 INCLUDEPATH += . src
 
-include(INSERT_YUOR_PATH_HERE_TO_THE_PROPERTY_BROWSER_SOLUTION/src/qtpropertybrowser.pri)
+include(../qtpropertybrowser/qtpropertybrowser.pri)
 # Input
 SOURCES += main.cpp
